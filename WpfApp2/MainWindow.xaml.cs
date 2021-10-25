@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -25,6 +26,7 @@ namespace WpfApp2
         Color currentStrokeColor;//筆刷顏色
         Brush currentStrokeBrush = new SolidColorBrush(Colors.Black);//筆刷類型 預設黑色
         int currentStrokeThickness;//筆刷粗細
+        string currentShape;
         public MainWindow()
         {
             InitializeComponent();
@@ -39,10 +41,35 @@ namespace WpfApp2
 
         private void MyCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            //畫一條直線
-            DrawLine();
+            switch (currentShape)
+            {
+                case "Line":
+                    //畫一條直線
+                    DrawLine();
+                    break;
+                case "Rectangle":
+                    //畫一個正方形
+                    DrawRectangle();
+                    break;
+            }
         }
 
+        /*畫正方形*/
+        private void DrawRectangle()
+        {
+            double width = dest.X - start.X;
+            double height = dest.Y - start.Y;
+            Rectangle newRectangle = new Rectangle();
+            {
+                newRectangle.Stroke = currentStrokeBrush;
+                newRectangle.StrokeThickness = currentStrokeThickness;
+                width = width;
+                Height = height;
+            };
+            MyCanvas.Children.Add(newRectangle);
+        }
+
+        /*畫直線*/
         private void DrawLine()
         {
             Line newLine = new Line();
@@ -56,19 +83,22 @@ namespace WpfApp2
             MyCanvas.Children.Add(newLine);
         }
 
-        private void StrokeThicknessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)//粗細
+        /*筆刷粗細*/
+        private void StrokeThicknessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             currentStrokeThickness = Convert.ToInt32(StrokeThicknessSlider.Value);
         }
 
-        private void ColorButton_Click(object sender, RoutedEventArgs e)//筆刷顏色
+        /*筆刷顏色*/
+        private void ColorButton_Click(object sender, RoutedEventArgs e)
         {
             currentStrokeColor = GetDialogColor();
             currentStrokeBrush = new SolidColorBrush(currentStrokeColor);
             MyLabel.Content=$"筆刷色彩: {currentStrokeColor.ToString()}";
         }
 
-        private Color GetDialogColor()//選擇顏色
+        /*選擇顏色*/
+        private Color GetDialogColor()
         {
             ColorDialog dlg = new ColorDialog();
             dlg.ShowDialog();
@@ -77,7 +107,14 @@ namespace WpfApp2
             return Color.FromArgb(dlgColor.A, dlgColor.R, dlgColor.G, dlgColor.B);
         }
 
-        private void myCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)//取得起點
+        private void ShapeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as System.Windows.Controls.Button;
+            currentShape = btn.Content.ToString();
+        }
+
+        /*取得起點*/
+        private void myCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             MyCanvas.Cursor = System.Windows.Input.Cursors.Cross;//按下滑鼠左鍵將游標改成十字
             start = e.GetPosition(MyCanvas);//起點座標點

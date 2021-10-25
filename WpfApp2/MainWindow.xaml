@@ -15,7 +15,9 @@
                 <Button x:Name="FillButton" Content="填滿色彩" Height="35" VerticalAlignment="Top" Width="79" Background="#FFE7ED6B"/>
             </ToolBar>
             <ToolBar HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="273" Margin="321,0,-570.8,-29.2">
-                <Button x:Name="LineButton" Content="Line" Height="37" VerticalAlignment="Top" Width="45" Margin="0,0,0,-0.2"/>
+                <Button x:Name="LineButton" Content="Line" Height="37" VerticalAlignment="Top" Width="45" Margin="0,0,0,-0.2" Click="ShapeButton_Click"/>
+                <Button x:Name="EllipseButton" Content="Ellipse" Height="37" VerticalAlignment="Top" Width="45" Margin="0,0,0,-0.2" Click="ShapeButton_Click"/>
+                <Button x:Name="RectangleButton" Content="Rectangle" Height="37" VerticalAlignment="Top" Width="72" Margin="0,0,0,-0.2" Click="ShapeButton_Click"/>
             </ToolBar>
         </ToolBarTray>
         <Canvas x:Name="MyCanvas" Height="350" Background="#FFE8EFFF" Margin="0,0,0.4,0" MouseLeftButtonDown="myCanvas_MouseLeftButtonDown" MouseMove="myCanvas_MouseMove" MouseLeftButtonUp="MyCanvas_MouseLeftButtonUp"/>
