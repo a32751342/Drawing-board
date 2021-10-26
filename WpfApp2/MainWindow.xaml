@@ -9,10 +9,10 @@
     <StackPanel HorizontalAlignment="Left" Height="425" VerticalAlignment="Top" Width="790" Margin="0,0,0,-5">
         <ToolBarTray Height="42" Background="#FFFDAEA1" Margin="0,0,0.4,0">
             <ToolBar HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="344" Margin="0,0,-320,-29.2">
-                <Button x:Name="ColorButton" Content="筆刷色彩" Height="35" VerticalAlignment="Top" Width="57" Click="ColorButton_Click" Background="#FFC2F0BF"/>
-                <Slider x:Name="StrokeThicknessSlider" Height="20" VerticalAlignment="Top" RenderTransformOrigin="-7.429,0.375" Width="114" Margin="0,10,0,0" ValueChanged="StrokeThicknessSlider_ValueChanged" Minimum="1" Maximum="20"/>
+                <Button x:Name="ColorButton" Content="筆刷色彩" Height="35" VerticalAlignment="Top" Width="57" Click="ColorButton_Click" Background="{x:Null}"/>
+                <Slider x:Name="StrokeThicknessSlider" Height="20" VerticalAlignment="Top" RenderTransformOrigin="-7.429,0.375" Width="114" Margin="0,10,0,0" ValueChanged="StrokeThicknessSlider_ValueChanged" Minimum="1" Maximum="20" IsSnapToTickEnabled="True"/>
                 <Label x:Name="StrokeThicknessLabel" Content="{Binding Value, ElementName=StrokeThicknessSlider}" Height="24" VerticalAlignment="Top" Width="44" Margin="0,6,0,0"/>
-                <Button x:Name="FillButton" Content="填滿色彩" Height="35" VerticalAlignment="Top" Width="79" Background="#FFE7ED6B"/>
+                <Button x:Name="FillButton" Content="填滿色彩" Height="35" VerticalAlignment="Top" Width="79" Background="{x:Null}"/>
             </ToolBar>
             <ToolBar HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="273" Margin="321,0,-570.8,-29.2">
                 <Button x:Name="LineButton" Content="Line" Height="37" VerticalAlignment="Top" Width="45" Margin="0,0,0,-0.2" Click="ShapeButton_Click"/>

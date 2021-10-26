@@ -61,11 +61,14 @@ namespace WpfApp2
             double height = dest.Y - start.Y;
             Rectangle newRectangle = new Rectangle();
             {
-                newRectangle.Stroke = currentStrokeBrush;
-                newRectangle.StrokeThickness = currentStrokeThickness;
-                width = width;
-                Height = height;
+                newRectangle.Stroke = currentStrokeBrush;//筆刷顏色
+                newRectangle.StrokeThickness = currentStrokeThickness;//粗細
+                newRectangle.Fill = currentStrokeBrush;//填滿顏色
+                newRectangle.Width = width;
+                newRectangle.Height = height;
             };
+            newRectangle.SetValue(Canvas.LeftProperty, start.X);
+            newRectangle.SetValue(Canvas.TopProperty, start.Y);
             MyCanvas.Children.Add(newRectangle);
         }
 
@@ -73,14 +76,14 @@ namespace WpfApp2
         private void DrawLine()
         {
             Line newLine = new Line();
-            newLine.Stroke = currentStrokeBrush;
-            newLine.StrokeThickness = currentStrokeThickness;
+            newLine.Stroke = currentStrokeBrush;//筆刷顏色
+            newLine.StrokeThickness = currentStrokeThickness;//粗細
             newLine.X1 = start.X;
             newLine.Y1 = start.Y;
             newLine.X2 = dest.X;
             newLine.Y2 = dest.Y;
 
-            MyCanvas.Children.Add(newLine);
+            MyCanvas.Children.Add(newLine);//加入為MyCanvas子項目
         }
 
         /*筆刷粗細*/
