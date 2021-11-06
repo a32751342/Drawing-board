@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RadioButton = System.Windows.Controls.RadioButton;
 
 namespace WpfApp2
 {
@@ -23,10 +15,13 @@ namespace WpfApp2
     public partial class MainWindow : Window
     {
         Point start, dest;//起點&終點
+        Color currentFillColor;
         Color currentStrokeColor;//筆刷顏色
+        Brush currentFillBrush = new SolidColorBrush(Colors.Black);
         Brush currentStrokeBrush = new SolidColorBrush(Colors.Black);//筆刷類型 預設黑色
-        int currentStrokeThickness;//筆刷粗細
-        string currentShape;
+        int currentStrokeThickness=1;//筆刷粗細
+        string currentShape = "Line";
+        string currentAction = "Draw";//預設為畫圖模式
         public MainWindow()
         {
             InitializeComponent();
@@ -34,9 +29,24 @@ namespace WpfApp2
 
         private void myCanvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)//取得終點
         {
-            dest = e.GetPosition(MyCanvas);//終點座標
-            MyLabel.Content = $"座標點:({start})-({dest})";
-
+            switch(currentAction)
+            {
+                case "Draw":
+                    //畫圖模式,滑鼠左鍵被按住時,持續取得滑鼠座標
+                    if (e.LeftButton == MouseButtonState.Pressed)
+                    {
+                        MyCanvas.Cursor = System.Windows.Input.Cursors.Pen;
+                        dest = e.GetPosition(MyCanvas);//終點座標
+                        MyLabel.Content = $"座標點:({start})-({dest})";
+                    }
+                    break;
+                case "Erase"://清除模式
+                    var selectedShape = e.OriginalSource as Shape;//取得滑鼠碰到的物件
+                    MyCanvas.Children.Remove(selectedShape);//清除MyCanvas子項目
+                    break;
+                default:
+                    return;
+            }
         }
 
         private void MyCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -51,25 +61,65 @@ namespace WpfApp2
                     //畫一個正方形
                     DrawRectangle();
                     break;
+                case "Ellipse":
+                    //畫一個橢圓形
+                    DrawEllipse();
+                    break;
             }
+            MyCanvas.Cursor = System.Windows.Input.Cursors.Arrow;
+        }
+
+        /*畫橢圓形*/
+        private void DrawEllipse()
+        {
+            AdjustPoint();
+            double width = dest.X - start.X;
+            double height = dest.Y - start.Y;
+            Ellipse newEllipse = new Ellipse()
+            {
+                Stroke = currentStrokeBrush,//筆刷顏色
+                StrokeThickness = currentStrokeThickness,//粗細
+                Fill = currentFillBrush,//填滿顏色
+                Width=width,
+                Height=height,
+            };
+            newEllipse.SetValue(Canvas.LeftProperty, start.X);
+            newEllipse.SetValue(Canvas.TopProperty, start.Y);
+            MyCanvas.Children.Add(newEllipse);//加入為MyCanvas子項目
         }
 
         /*畫正方形*/
         private void DrawRectangle()
         {
-            double width = dest.X - start.X;
-            double height = dest.Y - start.Y;
+            AdjustPoint();//不受限繪圖方向(重設xy)
+            double width = dest.X - start.X;//寬
+            double height = dest.Y - start.Y;//高
             Rectangle newRectangle = new Rectangle();
             {
                 newRectangle.Stroke = currentStrokeBrush;//筆刷顏色
                 newRectangle.StrokeThickness = currentStrokeThickness;//粗細
-                newRectangle.Fill = currentStrokeBrush;//填滿顏色
+                newRectangle.Fill = currentFillBrush;//填滿顏色
                 newRectangle.Width = width;
                 newRectangle.Height = height;
             };
-            newRectangle.SetValue(Canvas.LeftProperty, start.X);
+            newRectangle.SetValue(Canvas.LeftProperty, start.X);//左上角起點
             newRectangle.SetValue(Canvas.TopProperty, start.Y);
-            MyCanvas.Children.Add(newRectangle);
+            MyCanvas.Children.Add(newRectangle);//加入為MyCanvas子項目
+        }
+
+        private void AdjustPoint()
+        {
+            double X_min, Y_min, X_max, Y_max;
+
+            X_min = Math.Min(start.X, dest.X);
+            Y_min = Math.Min(start.Y, dest.Y);
+            X_max = Math.Max(start.X, dest.X);
+            Y_max = Math.Max(start.Y, dest.Y);
+
+            start.X = X_min;
+            start.Y = Y_min;
+            dest.X = X_max;
+            dest.Y = Y_max;
         }
 
         /*畫直線*/
@@ -98,6 +148,7 @@ namespace WpfApp2
             currentStrokeColor = GetDialogColor();
             currentStrokeBrush = new SolidColorBrush(currentStrokeColor);
             MyLabel.Content=$"筆刷色彩: {currentStrokeColor.ToString()}";
+            ColorButton.Background = currentStrokeBrush;//更改按鍵背景為所選顏色
         }
 
         /*選擇顏色*/
@@ -112,8 +163,21 @@ namespace WpfApp2
 
         private void ShapeButton_Click(object sender, RoutedEventArgs e)
         {
-            var btn = sender as System.Windows.Controls.Button;
-            currentShape = btn.Content.ToString();
+            RadioButton btn = sender as RadioButton;//轉型成button
+            currentShape = btn.Content.ToString();//currentShape讀取存字串按鍵類型
+            currentAction = "Draw";//畫圖模式
+        }
+
+        private void FillButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentFillColor = GetDialogColor();
+            currentFillBrush = new SolidColorBrush(currentFillColor);
+            FillButton.Background = currentFillBrush;
+        }
+
+        private void EraseButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentAction = "Erase";//清除模式
         }
 
         /*取得起點*/
