@@ -21,7 +21,7 @@
                 <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Line"  Click="ShapeButton_Click"/>
                 <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Ellipse" Click="ShapeButton_Click"/>
                 <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Rectangle" Click="ShapeButton_Click"/>
-                <RadioButton  GroupName="RadioButtonMenuGroup1" Content="FreeLine" Click="ShapeButton_Click"/>
+                <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Polygon" Click="ShapeButton_Click"/>
                 <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Erase" Click="EraseButton_Click"/>
             </MenuItem>
         </Menu>
@@ -36,16 +36,37 @@
                 <RadioButton x:Name="LineButton" GroupName="Group1" Content="Line" Height="37" VerticalAlignment="Top" Width="55" Margin="0,0,0,-0.2" Click="ShapeButton_Click"/>
                 <RadioButton x:Name="EllipseButton" GroupName="Group1" Content="Ellipse" Height="37" VerticalAlignment="Top" Width="55" Margin="0,0,0,-0.2" Click="ShapeButton_Click"/>
                 <RadioButton x:Name="RectangleButton" GroupName="Group1" Content="Rectangle" Height="37" VerticalAlignment="Top" Width="55" Margin="0,0,0,-0.2" Click="ShapeButton_Click"/>
-                <RadioButton x:Name="FreeLineButton" GroupName="Group1" Content="FreeLine" Height="37" VerticalAlignment="Top" Width="55" Margin="0,0,0,-0.2" Click="ShapeButton_Click"/>
+                <RadioButton x:Name="PolygonButton" GroupName="Group1" Content="Polygon" Height="37" VerticalAlignment="Top" Width="55" Margin="0,0,0,-0.2" Click="ShapeButton_Click"/>
                 <RadioButton x:Name="EraseButton" GroupName="Group1" Content="Erase" Height="37" VerticalAlignment="Top" Width="55" Margin="0,0,0,-0.2" Click="EraseButton_Click"/>
             </ToolBar>
             <ToolBar HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="113" Margin="619.8,0,-709.6,-29.2">
                 <Button x:Name="ClearButton" Content="Clear All" Height="36.8" VerticalAlignment="Top" Width="75" Click="ClearCanvasButton_Click"/>
             </ToolBar>
         </ToolBarTray>
-        <Canvas x:Name="MyCanvas" Height="331" Background="#FFE8EFFF" Margin="0,0,0.4,0" MouseLeftButtonDown="myCanvas_MouseLeftButtonDown" MouseMove="myCanvas_MouseMove" MouseLeftButtonUp="MyCanvas_MouseLeftButtonUp"/>
+        <Canvas x:Name="MyCanvas" Height="331" Background="#FFE8EFFF" Margin="0,0,0.4,0" MouseLeftButtonDown="myCanvas_MouseLeftButtonDown" MouseMove="myCanvas_MouseMove" MouseLeftButtonUp="MyCanvas_MouseLeftButtonUp">
+            <Canvas.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="檔案" Height="24" MouseRightButtonDown="MenuItem_MouseRightButtonDown">
+                        <CheckBox x:Name="RightmenuCheckBox" IsChecked="True" Content="顯示工具列" Click="menuCheckBox_Checked" />
+                        <MenuItem x:Name="RightClearCanvasButton" Header="清除畫布" Click="ClearCanvasButton_Click"/>
+                        <MenuItem x:Name="RightSaveCanvasMenuItem" Header="儲存畫布" Click="SaveCanvasMenuItem_Click"/>
+                    </MenuItem>
+                    <MenuItem Header="色彩" Height="24" MouseRightButtonDown="MenuItem_MouseRightButtonDown">
+                        <MenuItem Header="筆刷色彩" Click="ColorButton_Click"/>
+                        <MenuItem Header="填滿顏色" Click="FillButton_Click"/>
+                    </MenuItem>
+                    <MenuItem Header="工具" Height="24" MouseRightButtonDown="MenuItem_MouseRightButtonDown">
+                        <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Line"  Click="ShapeButton_Click"/>
+                        <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Ellipse" Click="ShapeButton_Click"/>
+                        <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Rectangle" Click="ShapeButton_Click"/>
+                        <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Polygon" Click="ShapeButton_Click"/>
+                        <RadioButton  GroupName="RadioButtonMenuGroup1" Content="Erase" Click="EraseButton_Click"/>
+                    </MenuItem>
+                </ContextMenu>
+            </Canvas.ContextMenu>
+        </Canvas>
         <StatusBar Height="31" Margin="0,0,0.4,0" Background="#FFF4C7C7">
-            <Label x:Name="MyLabel" Content="Label" Width="252" Margin="500,0,0,0"/>
+            <Label x:Name="MyLabel" Content="座標顯示" Width="252" Margin="500,0,0,0"/>
         </StatusBar>
     </StackPanel>
 </Window>

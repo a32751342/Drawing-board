@@ -17,19 +17,20 @@ namespace WpfApp2
     public partial class MainWindow : Window
     {
         Point start, dest;//起點&終點
-        Color currentFillColor;
+        Color currentFillColor;//填滿顏色
         Color currentStrokeColor;//筆刷顏色
-        Brush currentFillBrush = new SolidColorBrush(Colors.Black);
+        Brush currentFillBrush = new SolidColorBrush(Colors.Black);//填滿顏色 預設黑色
         Brush currentStrokeBrush = new SolidColorBrush(Colors.Black);//筆刷類型 預設黑色
         int currentStrokeThickness=1;//筆刷粗細
-        string currentShape = "Line";
+        string currentShape = "Line";//預設畫線模式
         string currentAction = "Draw";//預設為畫圖模式
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void myCanvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)//取得終點
+        /*取得終點*/
+        private void myCanvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             switch(currentAction)
             {
@@ -51,6 +52,7 @@ namespace WpfApp2
             }
         }
 
+        /*繪圖*/
         private void MyCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             switch (currentShape)
@@ -67,8 +69,18 @@ namespace WpfApp2
                     //畫一個橢圓形
                     DrawEllipse();
                     break;
+                case "Polygon":
+                    //畫一個多邊形
+                    DrawPolygon();
+                    break;
             }
-            MyCanvas.Cursor = System.Windows.Input.Cursors.Arrow;
+            MyCanvas.Cursor = System.Windows.Input.Cursors.Arrow;//游標維持箭頭
+        }
+
+        /*畫多邊形*/
+        private void DrawPolygon()
+        {
+            
         }
 
         /*畫橢圓形*/
@@ -93,7 +105,7 @@ namespace WpfApp2
         /*畫正方形*/
         private void DrawRectangle()
         {
-            AdjustPoint();//不受限繪圖方向(重設xy)
+            AdjustPoint();//不受限繪圖方向(重設XY)
             double width = dest.X - start.X;//寬
             double height = dest.Y - start.Y;//高
             Rectangle newRectangle = new Rectangle();
@@ -220,23 +232,32 @@ namespace WpfApp2
             RenderTargetBitmap rtb = new RenderTargetBitmap(w, h, 64d, 64d, PixelFormats.Default);
             rtb.Render(MyCanvas);
 
-            //將bitmap編碼成png格式
+            //將bitmap編碼成png jpg格式
             PngBitmapEncoder png = new PngBitmapEncoder();
+            PngBitmapEncoder jpg = new PngBitmapEncoder();
             png.Frames.Add(BitmapFrame.Create(rtb));
+            jpg.Frames.Add(BitmapFrame.Create(rtb));
 
             //開啟存檔對話方塊
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Title = "儲存小畫家檔案";
             saveFileDialog.DefaultExt = "*.png";
-            saveFileDialog.Filter = "PNG檔案(*.png)|*.png|全部檔案|*.*";
+            saveFileDialog.DefaultExt = "*.jpg";
+            saveFileDialog.Filter = "PNG檔案(*.png)|*.png|JPG檔案(*.jpg)|*.jpg|全部檔案|*.*";
             saveFileDialog.ShowDialog();
             string path = saveFileDialog.FileName;
 
-            //儲存png檔案
+            //儲存png jpg檔案
             using (var fs = File.Create(path))
             {
                 png.Save(fs);
+                jpg.Save(fs);
             }
+        }
+        /*點擊滑鼠右鍵出現選單*/
+        private void MenuItem_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
 
         /*取得起點*/
