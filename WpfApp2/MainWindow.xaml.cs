@@ -62,7 +62,7 @@ namespace WpfApp2
                     DrawLine();
                     break;
                 case "Rectangle":
-                    //畫一個正方形
+                    //畫一個矩形
                     DrawRectangle();
                     break;
                 case "Ellipse":
@@ -77,7 +77,7 @@ namespace WpfApp2
             MyCanvas.Cursor = System.Windows.Input.Cursors.Arrow;//游標維持箭頭
         }
 
-        /*畫多邊形*/
+        /*畫多邊形    !!!!!!!!!!不會!!!!!!!!!!*/
         private void DrawPolygon()
         {
             
@@ -102,7 +102,7 @@ namespace WpfApp2
             MyCanvas.Children.Add(newEllipse);//加入為MyCanvas子項目
         }
 
-        /*畫正方形*/
+        /*畫矩形*/
         private void DrawRectangle()
         {
             AdjustPoint();//不受限繪圖方向(重設XY)
@@ -147,7 +147,6 @@ namespace WpfApp2
             newLine.Y1 = start.Y;
             newLine.X2 = dest.X;
             newLine.Y2 = dest.Y;
-
             MyCanvas.Children.Add(newLine);//加入為MyCanvas子項目
         }
 
@@ -219,7 +218,6 @@ namespace WpfApp2
             MyCanvas.Children.Clear();//清除所有子項目
             MyCanvas.Cursor = System.Windows.Input.Cursors.Arrow;//游標改回箭頭
             MyLabel.Content = "Ready";
-
         }
 
         /*儲存畫布*/
